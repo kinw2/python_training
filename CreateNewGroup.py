@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+import unittest
 
+
+def is_alert_present(wd):
+    try:
+        wd.switch_to_alert().text
+        return True
+    except:
+        return False
 class CreateNewGroup(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
@@ -14,15 +19,20 @@ class CreateNewGroup(unittest.TestCase):
     
     def test_create_new_group(self):
         wd = self.wd
+        # open main page
         wd.get("http://localhost/addressbook/")
+        # login
         wd.find_element(By.NAME, "user").click()
         wd.find_element(By.NAME, "user").clear()
         wd.find_element(By.NAME, "user").send_keys("admin")
         wd.find_element(By.NAME, "pass").clear()
         wd.find_element(By.NAME, "pass").send_keys("secret")
         wd.find_element(By.XPATH, ("//input[@value='Login']")).click()
+        # open groups page
         wd.find_element(By.LINK_TEXT, ("groups")).click()
+        # init group creation
         wd.find_element(By.NAME, "new").click()
+        # fill group fields
         wd.find_element(By.NAME, "group_name").click()
         wd.find_element(By.NAME, "group_name").clear()
         wd.find_element(By.NAME, "group_name").send_keys("group1")
@@ -32,18 +42,16 @@ class CreateNewGroup(unittest.TestCase):
         wd.find_element(By.NAME, "group_footer").click()
         wd.find_element(By.NAME, "group_footer").clear()
         wd.find_element(By.NAME, "group_footer").send_keys("12qweqw")
+        # submit group creation
         wd.find_element(By.NAME, "submit").click()
+        # return to the groups page
         wd.find_element(By.LINK_TEXT, ("group page")).click()
+        # logout
         wd.find_element(By.LINK_TEXT, ("Logout")).click()
 
     def is_element_present(self, how, what):
         try: self.wd.find_element(by=how, value=what)
         except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
         return True
     
     def tearDown(self):
