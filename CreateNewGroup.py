@@ -15,6 +15,7 @@ class CreateNewGroup(unittest.TestCase):
     def test_create_new_group(self):
         wd = self.wd
         wd.get("http://localhost/addressbook/")
+        time.sleep(5)
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys("admin")
