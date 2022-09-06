@@ -15,7 +15,7 @@ def is_alert_present(wd):
         return False
 class CreateNewGroup(unittest.TestCase):
     def setUp(self):
-        self.wd = webdriver.Firefox()
+        self.wd = webdriver.Chrome('C:\Windows\SysWOW64\chromedriver')
         self.wd.implicitly_wait(60)
     
     def test_add_group(self):
